@@ -18,6 +18,8 @@ public:
 
 	bool unplot(int id);
 
+	void updateAllShpare();
+
 	// Simple callbacks.
 	void keyboard_callback(const pcl::visualization::KeyboardEvent& event, void* cookie);
 

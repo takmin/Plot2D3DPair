@@ -22,10 +22,11 @@ PcdViewer::~PcdViewer()
 void PcdViewer::printHelp()
 {
 	using pcl::console::print_info;
-	print_info("H: Print this help\n");
-	print_info("Shift + left click: pick a point");
-	print_info("D: delete the last seletected point\n");
-	print_info("Q: Quit and Save\n");
+	print_info("    h, H:    Print this help\n");
+	//print_info("Shift + left click: pick a point\n");
+	print_info("    >/<:    enlarge/ensmall plotted sphere\n");
+	print_info("    d, D:    delete the last seletected point\n");
+	print_info("    q, Q:    Quit and Save\n");
 	print_info("\n");
 }
 
@@ -47,6 +48,14 @@ void PcdViewer::keyboard_callback(const pcl::visualization::KeyboardEvent& event
 			bool ret = unplot(id);
 			//_update = true;
 		}
+	}
+	else if (KeyCode == '>') {
+		_radius *= 2;
+		updateAllShpare();
+	}
+	else if (KeyCode == '<') {
+		_radius /= 2;
+		updateAllShpare();	
 	}
 }
 
@@ -91,11 +100,26 @@ bool PcdViewer::plot(int id)
 }
 
 
-bool::PcdViewer::unplot(int id)
+bool PcdViewer::unplot(int id)
 {
 	std::string sphere_id = "sphere_" + Int2String(id);
 	bool ret = _viewer->removeShape(sphere_id);
 	return ret;
+}
+
+
+void PcdViewer::updateAllShpare()
+{
+	for (int i = 0; i < _pcd_point_id.size(); i++) {
+		int cur_color_id = i % _color_map.size();
+		float r = (float)_color_map[cur_color_id](0) / 255;
+		float g = (float)_color_map[cur_color_id](1) / 255;
+		float b = (float)_color_map[cur_color_id](2) / 255;
+		int id = _pcd_point_id[i];
+		PointT pt = _clouds->at(id);
+		std::string sphere_id = "sphere_" + Int2String(id);
+		bool ret = _viewer->updateSphere(pt, _radius, r, g, b, sphere_id);
+	}
 }
 
 
