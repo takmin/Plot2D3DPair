@@ -28,9 +28,9 @@ public:
 	static void printHelp();
 
 private:
-	bool _update;
+	//bool _update;
 	PointCloudPtr _clouds;
-	PointCloudPtr _src_clouds;
+	//PointCloudPtr _src_clouds;
 	float _radius;
 
 	pcl::visualization::PCLVisualizer::Ptr _viewer;

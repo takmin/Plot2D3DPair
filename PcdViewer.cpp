@@ -7,7 +7,7 @@
 
 PcdViewer::PcdViewer(const std::vector<Eigen::Vector3i>& color_map)
 {
-	_src_clouds = pcl::PointCloud<PointT>::Ptr(new pcl::PointCloud<PointT>);
+	//_src_clouds = pcl::PointCloud<PointT>::Ptr(new pcl::PointCloud<PointT>);
 	_clouds = pcl::PointCloud<PointT>::Ptr(new pcl::PointCloud<PointT>);
 	_radius = 10.0;
 	_color_map = color_map;
@@ -43,9 +43,9 @@ void PcdViewer::keyboard_callback(const pcl::visualization::KeyboardEvent& event
 		if (!_pcd_point_id.empty()) {
 			int id = _pcd_point_id.back();
 			_pcd_point_id.pop_back();
-			_clouds->at(id) = _src_clouds->at(id);
-			//bool ret = unplot(id);
-			_update = true;
+			//_clouds->at(id) = _src_clouds->at(id);
+			bool ret = unplot(id);
+			//_update = true;
 		}
 	}
 }
@@ -65,15 +65,15 @@ void PcdViewer::picking_callback(const pcl::visualization::PointPickingEvent& pp
 	int id = pp_event.getPointIndex();
 	if (id < 0)
 		return;
-	int cur_color_id = _pcd_point_id.size() % _color_map.size();
-	_clouds->at(id).r = _color_map[cur_color_id](0);
-	_clouds->at(id).g = _color_map[cur_color_id](1);
-	_clouds->at(id).b = _color_map[cur_color_id](2);
-	PointT pt = _clouds->at(id);
-	pcl::console::print_info("%d:[%f,%f,%f]\n", id, pt.x, pt.y, pt.z);
-	//bool ret = plot(id);
+	//int cur_color_id = _pcd_point_id.size() % _color_map.size();
+	//_clouds->at(id).r = _color_map[cur_color_id](0);
+	//_clouds->at(id).g = _color_map[cur_color_id](1);
+	//_clouds->at(id).b = _color_map[cur_color_id](2);
+	//PointT pt = _clouds->at(id);
+	//pcl::console::print_info("%d:[%f,%f,%f]\n", id, pt.x, pt.y, pt.z);
+	bool ret = plot(id);
 	_pcd_point_id.push_back(id);
-	_update = true;
+	//_update = true;
 }
 
 
@@ -114,10 +114,12 @@ bool PcdViewer::run(const std::string& pcd_file)
 	std::string ext = boost::filesystem::path(pcd_file).extension().string();
 	int ret = -1;
 	if (ext == ".pcd" || ext == ".PCD") {
-		ret = pcl::io::loadPCDFile(pcd_file, *_src_clouds);
+		//ret = pcl::io::loadPCDFile(pcd_file, *_src_clouds);
+		ret = pcl::io::loadPCDFile(pcd_file, *_clouds);
 	}
 	else if (ext == ".ply" || ext == ".PLY") {
-		ret = pcl::io::loadPLYFile(pcd_file, *_src_clouds);
+		//ret = pcl::io::loadPLYFile(pcd_file, *_src_clouds);
+		ret = pcl::io::loadPLYFile(pcd_file, *_clouds);
 	}
 	if (ret < 0) {
 		std::cerr << "Fail to load " << pcd_file << std::endl;
@@ -132,7 +134,7 @@ bool PcdViewer::run(const std::string& pcd_file)
 	_viewer->registerKeyboardCallback(&PcdViewer::keyboard_callback, *this);
 	_viewer->registerPointPickingCallback(&PcdViewer::picking_callback, *this);
 
-	*_clouds = *_src_clouds;
+	//*_clouds = *_src_clouds;
 
 	_viewer->addPointCloud(_clouds, cloud_id);
 
@@ -141,10 +143,10 @@ bool PcdViewer::run(const std::string& pcd_file)
 	{
 		// Render and process events in the two interactors
 		_viewer->spinOnce(100);
-		if (_update) {
-			_viewer->updatePointCloud(_clouds, cloud_id);
-			_update = false;
-		}
+		//if (_update) {
+		//	_viewer->updatePointCloud(_clouds, cloud_id);
+		//	_update = false;
+		//}
 		std::this_thread::sleep_for(std::chrono::microseconds(100));
 		//boost::this_thread::sleep(boost::posix_time::microseconds(100));
 	}
