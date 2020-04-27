@@ -25,7 +25,7 @@ void ImgViewer::printHelp()
 	printf("R: change plot circle radius\n");
 	printf("D: delete the last point\n");
 	printf("-: zoom out\n");
-	printf("double click: zoom in\n");
+	printf("shift + click: zoom in\n");
 }
 
 void ImgViewer::on_mouse(int event, int x, int y, int flag, void * param)
