@@ -11,5 +11,6 @@ The point pair can be plotted in the following steps:
 6. When you finish to choose corresponding points, then push "q" button at each windows to close.
 7. At "Quit? (1:Yes, 0:No):" prompt, input "0" if you have other point cloud / image pairs, or input "1" otherwise.
 8. If you input "0", process repeats from step2.
+9. If you input "1", input file name after "file name to save points:" prompt.  Then coordinates pairs between 3D point clouds and 2D images are save.
 
 You can see help with button "h" in each point cloud and image viewer.
